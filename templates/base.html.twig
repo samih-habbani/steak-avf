@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="{% block meta_description %} {% endblock %}" />
+        <meta name="keywords" content="Forum, Académie WS, Programmation, Développement web, Backend">
+        <title>{% block title %}- Steak au verre flou{% endblock %}</title>
+        <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
+        <!-- Include Nunito font from Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/sunburst.min.css">
+
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <body style="background-color: #100330; font-family: 'Nunito', sans-serif;">
+        {% include 'nav.html.twig' %}
+        {% block body %}
+        
+        {% endblock %}
+        {% include 'footer.html.twig' %}
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/go.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+    </body>
+</html>

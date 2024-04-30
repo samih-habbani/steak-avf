@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block meta_description %}
+Les dernières vidéos de l'Académie WS
+{% endblock %}
+
+{% block title %}Dernières vidéos de l'Académie WS {{parent()}}{% endblock %}
+
+{% block body %}
+
+    <div class="container inner-content my-5">
+        <div class="container-fluid px-0">
+            <div class="container">
+                <h2 class="mb-5 pb-4 text-light"><span class="text-primary">Nos</span> dernières vidéos YouTube</h2>
+            </div>
+            <div class="container mx-auto row videos">
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='0' frameborder="0" allowfullscreen></iframe>
+                </div>
+                                                            
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='1' frameborder="0" allowfullscreen></iframe>
+                </div>
+                                                            
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='2' frameborder="0" allowfullscreen></iframe>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='3' frameborder="0" allowfullscreen></iframe>
+                </div>
+                                                            
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='4' frameborder="0" allowfullscreen></iframe>
+                </div>
+                                                            
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='5' frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="bg-warning shadow">
+        <div class="container d-flex justify-content-center p-5">
+            <div class="text-light h3 fw-bold pt-5">Découvrez les questions par catégorie:</div>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-center px-5">
+            {% for category in categoriesWithQuestions %}
+                <a aria-label="{{ category.categoryName }}" class="text-decoration-none text-light m-1" href="{{ path('app_category', {'id': category.id}) }}">
+                    <button class="btn-cat btn btn-outline-secondary text-light">{{ category.categoryName }}</button>
+                </a>
+            {% endfor %}
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-center p-5">
+            <div>
+                <a aria-label="Questions" class="ps-2 h4 text-decoration-none text-light" href="{{ path('app_questions') }}">
+                    <img src="{{ asset('images/plus_icon.png') }}" alt="Découvrir les questions" width="80%">
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

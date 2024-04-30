@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block meta_description %}
+Découvrez nos catégories
+{% endblock %}
+{% block title %}Toutes les catégories {{parent()}}{% endblock %}
+
+{% block body %}
+
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-10">
+            <ul class="d-flex align-items-center list-unstyled">
+                <li class="text-secondary"><a aria-label="Page d'accueil" href="{{ path('app_home') }}" class="text-decoration-none text-secondary"><i class="fas fa-home text-secondary"> </li></i></a><span class="px-2 text-secondary">/</span>
+                <li class="text-secondary"><a aria-label="Questions" href="{{ path('app_questions') }}" class="text-decoration-none text-secondary">Questions</a><span class="mx-2">/&nbsp;</span></li>
+                <li class="text-secondary"><a aria-label="Catégories" href="#" class="text-decoration-none fw-bold text-secondary">Catégories</a></li>
+                {# <li class="text-secondary" id="tracking"></li> #}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5 text-light inner-content">
+    <h1 class="fw-bold">Catégories</h1>
+    <div class="row">
+        {% for category in categoriesWithQuestions %}
+            <div class="col-md-4 mb-4">
+                <div class="card bg-warning shadow">
+                    <div class="card-body">
+                        <a aria-label="{{category.categoryName}}" href="{{ path('app_category', {'id': category.id}) }}" class="btn bg-secondary text-light fw-bold" style="background-color:{{ category.bgColor }} !important; color:{{ category.textColor }} !important;">{{ category.categoryName }}</a>
+                        <p class="card-text text-light opacity-75 my-2">{{ category.description }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

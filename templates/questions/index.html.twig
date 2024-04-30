@@ -1,0 +1,318 @@
+{% extends 'base.html.twig' %}
+
+{% block meta_description %}
+    {% for question in question %}
+        {{ question.title }}
+    {% endfor %}
+{% endblock %}
+
+{% block title %}
+    {% for question in question %}
+        {{ question.category }} - {{ question.title }}
+    {% endfor %}
+    {{parent()}}
+{% endblock %}
+
+
+{% block body %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-10 mt-2">
+            <ul class="d-flex align-items-center list-unstyled">
+                <li class="text-secondary"><a aria-label="Page d'accueil" href="{{ path('app_home') }}" class="text-decoration-none text-secondary"><i class="fas fa-home text-secondary"> </li></i></a><span class="px-2 text-secondary">/</span>
+                <li class="text-secondary"><a aria-label="Questions" href="{{ path('app_questions') }}" class="text-decoration-none text-secondary">Questions</a><span class="mx-2">/&nbsp;</span></li>
+                <li class="text-secondary"><a aria-label="Catégories" href="{{ path('app_categories') }}" class="text-decoration-none text-secondary">Catégories</a><span class="mx-2">/&nbsp;</span></li>
+
+            {% for question in question %}
+                <li class="text-secondary"><a aria-label="{{ question.category }}" href="{{ path('app_category', {'id': question.category.id}) }}" class="text-decoration-none text-secondary">{{ question.category }}</a><span class="mx-2">/&nbsp;</span></li>
+                <li class="text-secondary"><a aria-label="{{ question.title }}" href="#" class="text-decoration-none text-secondary fw-bold"><p class="mt-3"style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 15vw;">{{ question.title }}</p></a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="text-light container my-1 inner-content px-5">
+    
+    
+    {% for notice in app.flashes('notice') %} {##############NOTIFICATION################}
+        <div>
+        &#129414; {{ notice }} &#9733;
+        </div>
+    {% endfor %}
+
+
+
+    {% for question in question %}
+    <div class="row">
+        {% if app.user %}
+            <div class="col-lg-1">
+                <div class="d-flex flex-column">
+                    {# Button for liking the question #}
+                    <button class="like-button btn btn-warning" data-question-id="{{ question.id }}"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg></button>
+                    <button class="like-button-hidden btn btn-success d-none"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg></button>
+                    
+                    <div class="d-flex justify-content-center">
+                        <p class="like-count mb-0">
+                            {% if question.likeCount %}
+                            {{ question.likeCount }}
+                            {% else %}
+                            0
+                            {% endif %}
+                        </p>
+                    </div>
+                    
+                    {# Button for disliking the question #}
+                    <button class="dislike-button-hidden btn btn-danger d-none"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/></svg></button>
+                    <button class="dislike-button btn btn-warning" data-question-id="{{ question.id }}"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/></svg></button>
+                </div>
+            </div>
+        {% endif %}
+       
+
+    <div class="col-lg-9">
+
+            
+        <h1 class="text-info fw-bold">
+            
+            {{ question.title }}
+            
+            <span class="h6 align-top">
+                <a aria-label="{{ question.category.categoryName }}" href="{{ path('app_category', {'id': question.category.id}) }}"><span class="badge bg-secondary mt-2" style="background-color:{{ question.category.bgColor }} !important; color:{{ question.category.textColor }};">{{ question.category }}</span></a>
+            </span>
+        </h1>
+            
+
+     
+        
+        
+        <div class="d-flex align-items-center text-light">
+            <i class="opacity-50 mx-2">par</i>
+            {% if question.user.profilePic %}
+            <img src="{{ asset('uploads/profile_pics/' ~ question.user.profilePic) }}" alt="{{ question.user.name }}" width="24px" height="24px" class="rounded me-1">
+            {% else %}
+            <!-- Display a default profile picture or a placeholder image -->
+            <img alt="Photo de profil par défaut" src="https://picsum.photos/50" class="rounded img-fluid m-1" width="24px" height="24px"/>
+            {% endif %}
+            
+            <span class="text-decoration-none link-secondary"><span class="fw-bold opacity-50">{{ question.user.name }}&nbsp;</span></span>
+            
+            <i class="opacity-50">le&nbsp;</i><span class="opacity-50">{{ question.creationDate|date("d/m/Y") }}</span>
+        </div>
+    </div>
+    
+        
+    {# CONTENT SECTION #}
+    <div class="shadow border border-secondary m-3 p-3 rounded">
+        <div class="bg-warning border border-secondary m-3 p-3 rounded shadow">
+        
+        {# first line #}
+        <div class="m-3">{{ question.content }}</div> 
+            {% if question.code %} <pre><code class="rounded"> {{ question.code }}</code></pre>
+            {% endif %}
+
+        {# second line #}
+        <div class="m-3">{{ question.contentTwo }}</div> 
+            {% if question.codeTwo %} <pre><code class="rounded"> {{ question.codeTwo }}</code></pre>
+            {% endif %}
+
+        {# second line #}
+        <div class="m-3">{{ question.contentThree }}</div> 
+            {% if question.codeThree %} <pre><code class="rounded"> {{ question.codeThree }}</code></pre> 
+            {% endif %}
+
+        {# second line #}
+        <div class="m-3">{{ question.contentFour }}</div> 
+            {% if question.codeFour %} <pre><code class="rounded"> {{ question.codeFour }}</code></pre>
+            {% endif %}
+        </div>
+    </div>
+        
+        
+    <div style="padding-bottom: 20px;"> </div>
+    {% endfor %}
+    
+
+
+    
+
+    {#ALL ANSWERS SECTION#}
+    {#ALL ANSWERS SECTION#}
+    {#ALL ANSWERS SECTION#}
+    {#ALL ANSWERS SECTION#}
+
+    <div class="shadow container border border-secondary m-5 py-4 px-5 rounded">
+        <h2 class="fw-bold">{{ question.0.answers|length }} Réponses</h2>
+
+        
+    {% for answer in answers %}
+    <div class="d-flex flex-row">
+        {# LIKE AN ANSWER #}
+        {% if app.user %}
+            
+                <div class="d-flex flex-column">
+                    {# Button for liking the answer #}
+                    <button class="like-button-answ-hidden btn btn-success d-none" data-answer-id="{{ answer.id }}"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg></button>
+                    <button class="like-button-answ btn btn-warning" data-answer-id="{{ answer.id }}"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg></button>
+                    
+                    <div class="d-flex justify-content-center">
+                        <p class="like-count-answ mb-0">
+                            {% if answer.likeCount %}
+                            {{ answer.likeCount }}
+                            {% else %}
+                            0
+                            {% endif %}
+                        </p>
+                    </div>
+                    
+                    {# Button for disliking the answer #}
+                    
+                    <button class="dislike-button-answ btn btn-warning" data-answer-id="{{ answer.id }}"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/></svg></button>
+                    <button class="dislike-button-answ-hidden btn btn-danger d-none"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/></svg></button>
+                </div>
+            
+    {% endif %}
+
+
+
+
+
+
+        <div class="shadow container border border-secondary m-2 p-3 rounded">
+            {% if answer.user.profilePic %}
+            <img src="{{ asset('uploads/profile_pics/' ~ answer.user.profilePic) }}" alt="{{ answer.user.name }}" width="24px" height="24px" class="rounded me-1">
+            {% else %}
+            <!-- Display a default profile picture or a placeholder image -->
+            <img alt="Photo de profil par défaut" src="https://picsum.photos/50" class="rounded img-fluid m-1" width="24px" height="24px"/>
+            {% endif %}
+            
+            {% if app.user %}
+                <span class="text-decoration-none link-secondary" href="#">
+                    <span class="fw-bold opacity-50">{{ answer.user.name }}&nbsp;</span>
+                </span>
+            {% else %}
+                <span class="fw-bold opacity-50">{{ answer.user.name }}&nbsp;</span>  
+            {% endif %}
+            <i class="opacity-50">le&nbsp;</i><span class="opacity-50">{{ answer.creationDate|date("d/m/Y") }}</span>
+
+            <div class="m-3">{{ answer.content }}</div>
+            {% if answer.code %}
+                <pre><code class="rounded">{{ answer.code }}</code></pre>
+            {% endif %}
+
+            <div class="m-3">{{ answer.contentTwo }}</div>
+            {% if answer.codeTwo %}
+                <pre><code class="rounded">{{ answer.codeTwo }}</code></pre>
+            {% endif %}
+
+            <div class="m-3">{{ answer.contentThree }}</div>
+            {% if answer.codeThree %}
+                <pre><code class="rounded">{{ answer.codeThree }}</code></pre>
+            {% endif %}
+
+            <div class="m-3">{{ answer.contentFour }}</div>
+            {% if answer.codeFour %}
+                <pre><code class="rounded">{{ answer.codeFour }}</code></pre>
+            {% endif %}
+        
+            <div style="padding-bottom: 20px;"></div>
+        </div>
+    </div>    
+        {% endfor %}
+    </div>
+
+
+
+    {# YOUR ANSWER SECTION #}
+    
+    <div>
+        <h2>Votre Réponse</h2>
+        {% if app.user %}
+            <div>
+                {{ form_start(answer_form, {attr: {'novalidate': 'novalidate'}}) }}
+
+                {{ form_row(answer_form.content) }}
+                {{ form_row(answer_form.code) }}
+
+                <div class="mb-1 opacity-50">Lignes supplémentaires</div>
+
+                <div class="add-content-two d-none">{{ form_row(answer_form.contentTwo) }}</div>
+                <div class="add-code-two d-none">{{ form_row(answer_form.codeTwo) }}</div>
+                <div class="add-content-three d-none">{{ form_row(answer_form.contentThree) }}</div>
+                <div class="add-code-three d-none">{{ form_row(answer_form.codeThree) }}</div>
+                <div class="add-content-four d-none">{{ form_row(answer_form.contentFour) }}</div>
+                <div class="add-code-four d-none">{{ form_row(answer_form.codeFour) }}</div>
+
+                <div class="btn btn-warning toggle-content-two"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z"/></svg></div>
+                <div class="btn btn-warning toggle-content-three"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z"/></svg></div>
+                <div class="btn btn-warning toggle-content-four"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z"/></svg></div>
+                <div class="btn btn-warning toggle-code-two"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3L562.7 256l-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg></div>
+                <div class="btn btn-warning toggle-code-three"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3L562.7 256l-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg></div>
+                <div class="btn btn-warning toggle-code-four "><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3L562.7 256l-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg></div>
+                <div class="m-3"></div>
+
+
+                {{ form_end(answer_form) }}
+            </div>
+        {% else %}
+            <div>
+                <a aria-label="Répondre" class="text-decoration-none px-5 btn btn-primary text-light mb-5" href="{{ path('app_login') }}">Répondre</a>
+            </div>
+        {% endif %}
+    </div>
+
+
+    {#RELATED QUESTIONS#}
+    {#RELATED QUESTIONS#}
+    {#RELATED QUESTIONS#}
+    {#RELATED QUESTIONS#}
+
+<div class="row">
+    <div class="col-md-6">
+        {% if relatedQuestions %}
+        <div>
+            <h4 class="mt-5">Questions associées</h4>
+            <div class="container shadow rounded">
+                {% for relatedQuestion in relatedQuestions %}
+                    <div>
+                        <div class="btn btn-secondary p-1 m-1">{{ relatedQuestion.likeCount }}</div>
+                        <a aria-label="{{ relatedQuestion.title }}" class="text-decoration-none text-secondary" href="{{ path('app_question', {'id': relatedQuestion.id}) }}">{{ relatedQuestion.title }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <div>
+            <h4 class="mt-5">Dernières vidéos par Academie WS</h4>
+            <div class="container shadow rounded pb-1" id="video-list">
+            {# Video links will be inserted here dynamically by JavaScript #} 
+        </div>
+</div>
+
+        
+    </div>
+</div>
+
+    </div>
+
+    </div>
+
+</div>
+
+    {# COURSE INTEGRATION #}
+    {% if category.video %}
+        <div class="container my-5 text-light inner-content">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 mx-auto">
+                    <h2 class="text-center my-5">Découvrez notre cours de <span class="text-primary fw-bold">{{ category.categoryName }}</span></h2>
+                    <div class="text-center video-container">{{ category.video|raw }}</div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

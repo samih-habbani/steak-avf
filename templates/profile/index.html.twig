@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block meta_description %}
+Bienvenue dans votre page profil
+{% endblock %}
+{% block title %}Bonjour {{ app.user.name }} {{parent()}}{% endblock %}
+
+{% block body %}
+    
+    <div class="my-5 p-5 text-light inner-content container">  
+        <a aria-label="Editer mon profil" href="{{path('edit_profile')}}" class="btn btn-primary float-end text-light">Editer le profil</a>
+        <ul class="list-unstyled">
+           
+            {% if app.user.profilePic %}
+            <img alt="Photo de profil" src="{{ asset('uploads/profile_pics/' ~ app.user.profilePic) }}" class="rounded img-fluid m-3" width="100vw"/>
+            {% else %}
+            <!-- Display a default profile picture or a placeholder image -->
+            <img alt="Photo de profil par défaut" src="https://picsum.photos/50" class="rounded img-fluid m-3"/>
+            {% endif %}
+            <span class="h6 text-info">inscrit le {{ app.user.registrationDate|date('d-m-Y') }} | </span>
+            <span class="h6 text-info">{{ app.user.name }} |</span>
+            <span class="h6 text-info">{{ app.user.email }}</span>
+            <li><a aria-label="Réinitialiser mon mot de passe" class="text-decoration-none m-3 link-secondary fw-bold" href="{{ path('app_forgot_password_request') }}">Réinitialiser mon mot de passe</a></li>
+
+            <li><a aria-label="Souscrire à la newsletter" class="text-decoration-none m-3 link-secondary fw-bold" href="#">S'inscrire à notre newsletter</a></li>
+
+            </ul>
+
+
+            {# test #}
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="card shadow bg-warning">
+                        <div class="card-body">
+                            <h5 class="card-title text-light fw-bold">Questions par utilisateur</h5>
+                                <ul class="list-unstyled">
+                                    {% for question in recent_questions %}
+                                        <li><a aria-label="{{question.title}}" class="text-decoration-none" href="{{ path('app_question', {'id': question.id}) }}">{{ question.title }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            <a aria-label="Ajouter une question" href="{{path('new_question')}}" class="btn btn-secondary">Poser une question</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="card bg-warning">
+                        <div class="card-body">
+                            <h5 class="card-title text-light fw-bold">Réponses par utilisateur</h5>
+                                <ul class="list-unstyled">
+                                    {% for answer in recent_answers %}
+                                        <li><a aria-label="{{answer.question.title}}" class="text-decoration-none" href="{{ path('app_question', {'id': answer.question.id}) }}">{{ answer.question.title }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            <a aria-label="Charger plus de questions" href="{{path('app_questions')}}" class="btn btn-secondary" >Rechercher des questions</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+    </div>
+    <div class="p-5"></div>
+
+{% endblock %}

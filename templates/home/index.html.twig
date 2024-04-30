@@ -1,0 +1,173 @@
+{% extends 'base.html.twig' %}
+
+{% block meta_description %}
+Steak au verre flou est le forum officiel de l'Académie WS
+{% endblock %}
+{% block title %}Page d'accueil {{parent()}}{% endblock %}
+
+{% block body %}
+
+<div class="container d-flex justify-content-center">
+    <div class="text-light h3 fw-bold">Bienvenue sur Forum de <a aria-label="Formations digitales en vidéo, sans blabla!" class="text-decoration-none link-secondary" href="https://academiews.fr/" target="blank_">Academie WS!</a></div>
+</div>
+
+<div class="container inner-content my-5">
+    <div class="row">
+        <!-- Left column for the promo video (70% width) -->
+        <div class="col-lg-7">
+            <iframe class="rounded" width="100%" height="420" src="https://player.vimeo.com/video/835006242?h=1b1d19f4e7" title="Vimeo video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+
+        <!-- Right column for the questions (30% width) -->
+        <div class="col-lg-5">
+
+        <div class="container d-flex justify-content-between">
+            <div>
+                <p class="text-light fw-bold h3">Questions Récentes</p>
+            </div>
+            {% if app.user %}
+                <div>
+                    <button class="btn btn-primary float-end"><a aria-label="Poser une question" class="text-decoration-none link-light" href="{{ path('new_question') }}">Poser une question</a></button>
+                </div>
+            {% else %}
+                <div>
+                    <button class="btn btn-primary"><a aria-label="Poser une question" class="text-decoration-none link-light" href="{{ path('app_login') }}">Poser une question</a></button>
+                </div>
+            {% endif %}
+        </div>
+
+            {% for notice in app.flashes('notice') %}
+                <div class="text-light">
+                    &#129414; {{ notice }} &#9733;
+                </div>
+            {% endfor %}
+
+            
+             {% for question in pagination %}
+                <div class="shadow p-3 mb-3 shadow rounded">
+                    <a aria-label="{{ question.title }}" class="h4 text-decoration-none link-info fw-bold" href="{{ path('app_question', {'id': question.id}) }}">{{ question.title }}</a>
+                    <div class="text-light" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 300px;">{{ question.content }}</div>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center text-light">
+                            <i class="opacity-50">par &nbsp;</i>
+                            {% if question.user.profilePic %}
+                            <img src="{{ asset('uploads/profile_pics/' ~ question.user.profilePic) }}" alt="{{ question.user.name }}" width="24px" height="24px" class="rounded me-1">
+                            {% else %}
+                            <!-- Display a default profile picture or a placeholder image -->
+                            <img alt="Photo de profil par défaut" src="https://picsum.photos/50" class="rounded img-fluid m-1" width="24px" height="24px"/>
+                            {% endif %}
+                            <span class="fw-bold opacity-50 text-secondary">{{ question.user.name }}&nbsp;</span>
+                            <i class="opacity-50">le&nbsp;</i><span class="opacity-50">{{ question.creationDate|date("d/m/Y") }}</span>
+                        </div>
+                        <div>
+                            {% if question.likeCount %}
+                            <span class="text-primary"> {{ question.likeCount }} &#10084;</span>
+                            {% else %}
+                            <span class="text-primary"> 0 &#10084;</span>
+                            {% endif %}
+                            
+                            {% if question.viewCount %}
+                            <span class="text-info">{{ question.viewCount }} <span class="h5">
+                            {% else %}
+                            <span class="text-info">0 <span class="h5">
+                            {% endif %}
+
+                            <svg xmlns="http://www.w3.org/2000/svg" height="0.75em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#6a8bff}</style><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"/></svg></span></span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <!-- Paginator -->
+            <div class="container d-flex justify-content-center">
+                <div class="text-center">
+                    {{ knp_pagination_render(pagination, '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig') }}
+                </div>
+            </div>    
+
+        </div>
+    </div>
+</div>
+
+
+<div class="bg-warning shadow">
+    <div class="container d-flex justify-content-center p-5">
+        <div class="text-light h3 fw-bold pt-5">Découvrez les questions par catégorie:</div>
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-center px-5">
+        {% for category in categoriesWithQuestions %}
+            <a aria-label="{{ category.categoryName }}" class="text-decoration-none text-light m-1" href="{{ path('app_category', {'id': category.id}) }}">
+                <button class="btn-cat btn btn-outline-secondary text-light">{{ category.categoryName }}</button>
+            </a>
+        {% endfor %}
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-center p-5">
+        <div>
+            <a aria-label="Afficher toutes les questions" class="ps-2 h4 text-decoration-none text-light" href="{{ path('app_questions') }}">
+                <img src="{{ asset('images/plus_icon.png') }}" alt="Découvrir les questions" width="80%">
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<section class="bg-secondary-dark py-5">
+
+
+    <h2 class="text-center text-light my-3"> Rejoignez-nous sur Discord ! </h2>
+
+    <div class="row mx-auto col-md-6 mt-5">
+        <a aria-label="Découvrez notre serveur Discord - Formation WS" href="https://discord.gg/TVyp5YQQMp" target="_blank">
+            <img alt="Découvrez notre serveur Discord - Formation WS" id="img-discord" src="{{ asset('images/discord_img.png') }}" class="cursor-pointer img-fluid pulse-effect">
+        </a>
+    </div>
+
+
+</section>
+
+<div class="bg-warning shadow">
+
+    <div class="container d-flex justify-content-center p-5">
+        <div class="text-light h3 fw-bold p-5">Dernières vidéos par <a aria-label="Formations digitales en vidéo, sans blabla!" class="text-decoration-none link-secondary" href="https://academiews.fr/" target="blank_">Academie WS</a></div>
+    </div>
+
+            <div class="container mx-auto row videos">
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='0' frameborder="0" allowfullscreen></iframe>
+                </div>
+                                                            
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='1' frameborder="0" allowfullscreen></iframe>
+                </div>
+                                                            
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='2' frameborder="0" allowfullscreen></iframe>
+                </div>
+                
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='3' frameborder="0" allowfullscreen></iframe>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='4' frameborder="0" allowfullscreen></iframe>
+                </div>
+
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='5' frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+
+        <div class="d-flex flex-wrap justify-content-center p-5">
+            <div>
+                <a aria-label="Nos vidéos récentes" class="ps-2 h4 text-decoration-none text-light" href="{{ path('app_recent_videos') }}"><img src="{{ asset('images/plus_icon.png') }}" alt="Découvrir nos vidéos" width="80%"></a>
+            </div>
+        </div>
+
+</div>
+
+
+
+
+{% endblock %}

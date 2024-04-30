@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block meta_description %}
+{{ category.categoryName }}
+{% endblock %}
+{% block title %}{{ category.categoryName }} {{parent()}}{% endblock %}
+
+{% block body %}
+
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-10">
+            <ul class="d-flex align-items-center list-unstyled">
+                <li class="text-secondary"><a aria-label="Page d'accueil" href="{{ path('app_home') }}" class="text-decoration-none text-secondary"><i class="fas fa-home text-secondary"> </li></i></a><span class="px-2 text-secondary">/</span>
+                <li class="text-secondary"><a aria-label="Questions" href="{{ path('app_questions') }}" class="text-decoration-none text-secondary">Questions</a><span class="mx-2">/&nbsp;</span></li>
+                <li class="text-secondary"><a aria-label="Catégories" href="{{ path('app_categories') }}" class="text-decoration-none text-secondary">Catégories</a><span class="mx-2">/&nbsp;</span></li>
+                <li class="text-secondary"><a aria-label="{{category.categoryName}}" href="#" class="text-decoration-none text-secondary fw-bold">{{ category.categoryName }}</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5 text-light inner-content">
+    <h1 class="fw-bold">{{ category.categoryName }}</h1>
+    <p class="opacity-75 mx-2">{{ category.description }}</p>
+    <div class="row">
+        {% for question in category.questions %}
+            <div class="col-md-10 mb-4">
+                <div class="card bg-warning shadow">
+                    <div class="card-body text-light">
+                        <a aria-label="{{ question.title }}" href="{{ path('app_question', {'id': question.id}) }}" class="card-title fw-bold text-info h2 text-decoration-none">{{ question.title }}</a>
+                        <p class="card-text opacity-75" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 500px;">{{ question.content }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+    {# COURSE INTEGRATION #}
+    {% if category.video %}
+        <div class="container my-5 text-light inner-content">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 mx-auto">
+                    <h2 class="text-center mb-5">Découvrez notre cours de <a aria-label="Nos formations vidéo - Académie WS" href="https://academiews.fr/categories" class="text-decoration-none" target=""><span class="text-primary fw-bold" style="color:{{ category.bgColor }} !important">{{ category.categoryName }}</span></a></h2>
+                    <div class="text-center video-container">{{ category.video|raw }}</div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

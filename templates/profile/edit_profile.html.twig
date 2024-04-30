@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme edit_profile_form 'bootstrap_5_layout.html.twig' %}
+
+{% block meta_description %}
+Modifier son profil
+{% endblock %}
+{% block title %}Editer le profil {{ app.user.name }} {{parent()}}{% endblock %}
+
+{% block body %}
+
+
+
+    {{ form_start(edit_profile_form) }}
+      
+ 
+    
+    <div class="my-5 p-5 text-light container inner-content">  
+    <h1>Editer le profil</h1>
+        <button class="btn btn-primary text-light float-end">Sauvegarder</button>
+        <ul class="list-unstyled">
+            {% if app.user.profilePic %}
+            <img src="{{ asset('uploads/profile_pics/' ~ app.user.profilePic) }}" alt="Photo de profil" class="rounded img-fluid m-3" width="100vw"/>
+            {% else %}
+            <!-- Display a default profile picture or a placeholder image -->
+            <img alt="Photo de profil par défaut" src="https://picsum.photos/50" alt="Photo de profil par défaut" class="rounded img-fluid m-3"/>
+            {% endif %}
+            <span class="h6">inscrit le {{ app.user.registrationDate|date('d-m-Y') }}</span>
+            <li class="h4"> {{ form_row(edit_profile_form.name) }}</li>
+            <li class="h4"> {{ form_row(edit_profile_form.email) }}</li>
+            <li class="h4"> {{ form_row(edit_profile_form.profilePic) }}</li>
+            <li><a aria-label="Réinitialiser mon mot de passe" class="text-decoration-none" href="{{ path('app_forgot_password_request') }}">Réinitialiser mon mot de passe</a></li>
+
+            <li><a aria-label="S'inscrire à notre newsletter" class="text-decoration-none" href="#">S'inscrire à notre newsletter</a></li>
+
+            </ul>
+
+
+            {# test #}
+            {# <div class="row">
+            <div class="col-sm-3">
+                <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Questions / created by user, in progress</h5>
+                    <p class="card-text"><a class="h6 text-decoration-none link-primary" href="#"> Question Title</a></p>
+                    <a href="{{path('new_question')}}" class="btn btn-primary">Ask Question</a>
+                </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Answers / answered by user, in progress</h5>
+                    <p class="card-text"><a class="h6 text-decoration-none link-primary" href="#"> Question Title</a></p>
+                    <a href="{{path('app_home')}}" class="btn btn-primary">Browse Questions</a>
+                </div>
+                </div>
+            </div>
+            </div> #}
+       
+    </div>
+    {{ form_end(edit_profile_form) }}
+
+{% endblock %}

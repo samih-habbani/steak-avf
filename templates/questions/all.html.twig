@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block meta_description %}
+Toutes nos questions
+{% endblock %}
+
+{% block title %}
+Questions {{parent()}}
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-10">
+            <ul class="d-flex align-items-center list-unstyled">
+                <li class="text-secondary"><a aria-label="Page d'accueil" href="{{ path('app_home') }}" class="text-decoration-none text-secondary"><i class="fas fa-home text-secondary"> </li></i></a><span class="px-2 text-secondary">/</span>
+                <li class="text-secondary"><a aria-label="Questions" href="{{ path('app_questions') }}" class="text-decoration-none fw-bold text-secondary">Questions</a></li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="inner-content container my-5">
+
+    <div class="container d-flex justify-content-center">
+        <div class="text-light h3 fw-bold">Questions - Réponses</div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                <p class="text-light h5">Toutes les catégories</p>
+                <ul class="list-unstyled">
+                    <li>
+                        <a aria-label="Toutes les catégories" href="{{ path('app_categories') }}" class="category-link text-decoration-none fw-bold">Voir tout</a>
+                    </li>
+                    {% for category in categories %}
+                        <li>
+                            <a aria-label="{{ category.categoryName }}" href="javascript:void(0);" class="category-link text-decoration-none opacity-50" data-category-id="{{ category.id }}">{{ category.categoryName }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                {% if app.user %}
+                    <div>
+                        <button class="btn btn-primary float-end"><a aria-label="Poser une question" class="text-decoration-none link-light" href="{{ path('new_question') }}">Poser une question</a></button>
+                    </div>
+                {% else %}
+                    <div>
+                        <button class="btn btn-primary"><a aria-label="Poser une question" class="text-decoration-none link-light" href="{{ path('app_login') }}">Poser une question</a></button>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-9" id="question-container">
+                {% include 'questions/_question_list.html.twig' with {'questions': paginationQuestions} %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<div class="bg-warning shadow">
+
+    <div class="container d-flex justify-content-center p-5">
+        <div class="text-light h3 fw-bold p-5">Dernières vidéos par Academie WS</div>
+    </div>
+
+            <div class="container mx-auto row videos">
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='0' frameborder="0" allowfullscreen></iframe>
+                </div>
+                                                            
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='1' frameborder="0" allowfullscreen></iframe>
+                </div>
+                                                            
+                <div class="col-md-4 col-sm-6 mb-5">
+                    <iframe class="latestVideoEmbed rounded" style="height:230px;width:100%" vnum='2' frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+
+        <div class="d-flex flex-wrap justify-content-center p-5">
+            <div>
+                <a aria-label="Nos vidéos récentes" class="ps-2 h4 text-decoration-none text-light" href="{{ path('app_recent_videos') }}"><img src="{{ asset('images/plus_icon.png') }}" alt="Découvrir nos vidéos" width="80%"></a>
+            </div>
+        </div>
+
+</div>
+
+
+
+{% endblock %}
